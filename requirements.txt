@@ -1,0 +1,9 @@
+langchain-core
+langchain-community
+langchain-openai
+langchain-huggingface
+langgraph
+mem0ai
+sentence-transformers
+python-dotenv
+chromadb
