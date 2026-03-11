@@ -2,7 +2,13 @@ from __future__ import annotations
 from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+
+
+OPENROUTER_API_KEY=os.getenv("OPENROUTER_API_KEY")
 
 class Settings(BaseSettings):
     
@@ -13,11 +19,14 @@ class Settings(BaseSettings):
     )
     
     app_name: str = "Customer Support Agent"
-    OPENAI_API_KEY: str =""
+    OPENAI_API_KEY: str =OPENROUTER_API_KEY
+    google_api_key: str = ""
     OPENAI_API_BASE: str = "https://openrouter.ai/api/v1"
     OPENAI_MODEL: str = "nvidia/nemotron-3-nano-30b-a3b:free"
+    google_embedding_model: str = "gemini-embedding-001"
     OPENAI_TEMPERATURE: float = 0.1
     huggingface_embedding_model: str = "sentence-transformers/all-mpnet-base-v2"
+    enable_local_embeddings: bool = True
     
     workspace_dir: Path = Path(__file__).resolve().parent[2]
     data_dir: Path = Path("data")
@@ -57,7 +66,7 @@ class Settings(BaseSettings):
         return self.resolve(self.knowledge_base_dir)
     
     @property
-    def effective_emebeddig_model(self)-> str:
+    def effective_embedding_model(self)-> str:
         """Determine which embedding model to use based on configuration."""
         model= (self.huggingface_embedding_model or "").strip()
         if not model:

@@ -2,6 +2,7 @@ langchain-core
 langchain-community
 langchain-openai
 langchain-huggingface
+langchain-text-splitters
 langgraph
 mem0ai
 sentence-transformers

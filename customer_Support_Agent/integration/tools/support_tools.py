@@ -92,3 +92,7 @@ def lookup_open_ticket_load(customer_email: str) -> str:
             ),
         }
     )
+    
+    
+def get_support_tools() -> list:
+    return [lookup_customer_plan, lookup_open_ticket_load]
