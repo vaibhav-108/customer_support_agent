@@ -4,7 +4,15 @@ langchain-openai
 langchain-huggingface
 langchain-text-splitters
 langgraph
+
 mem0ai
 sentence-transformers
 python-dotenv
 chromadb
+fastapi
+uvicorn[standard]
+pydantic-settings
+streamlit
+requests
+email-validator
+
