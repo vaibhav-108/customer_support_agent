@@ -9,5 +9,4 @@ wheels/
 # Virtual environments
 .venv
 .env
-python312.tar
-.python312.tar
+echo "python312.tar"
