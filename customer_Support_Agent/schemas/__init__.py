@@ -11,7 +11,7 @@ from customer_Support_Agent.schemas.api import (
     DraftSignals,
     DraftResponse,
     DraftUpdateRequest,
-    GenerateDraftRequest,
+    GenerateDraftResponse,
 
 )
 
@@ -24,7 +24,7 @@ __all__ = [
     "DraftSignals",
     "DraftResponse",
     "DraftUpdateRequest",
-    "GenerateDraftRequest", 
+    "GenerateDraftResponse", 
     "CustomerMemoriesResponse",
     "CustomerMemorySearchResponse",
     "KnowledgeIngestRequest",

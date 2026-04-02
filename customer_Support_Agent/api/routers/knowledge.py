@@ -13,6 +13,7 @@ def ingest_knowledge_route(
     payload: KnowledgeIngestRequest,
     knowledge_service: KnowledgeService = Depends(get_knowledge_service),
 ) -> dict[str, int]:
+    print("Debug pyalod service", payload)
     try:
         return knowledge_service.ingest(clear_existing=payload.clear_existing)
     except Exception as exc:

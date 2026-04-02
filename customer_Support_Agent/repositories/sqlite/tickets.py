@@ -71,7 +71,7 @@ class TicketRepository:
                 """
                 SELECT COUNT(*) AS open_count
                 FROM tickets t
-                JOIN cutomers c ON c.id = t.customer_id
+                JOIN customers c ON c.id = t.customer_id
                 WHERE c.email = ? AND t.status = 'open'
                 """,
                 (customer_email,)

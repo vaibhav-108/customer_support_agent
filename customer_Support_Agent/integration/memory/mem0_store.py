@@ -28,14 +28,16 @@ class CustomeMemoryStore:
             "embedder": {
                     "provider": "huggingface",
                     "config": {
-                        "model": settings.huggingface_embedding_model},
+                        "model": settings.effective_embedding_model,},
                 },
-            # "vector_store": {
-            #         "provider": "chroma",
-            #         "config": {
-            #             "path": str(settings.chroma_memo0_dir),
-            #             },
-            #     },
+           "vector_store": {
+                "provider": "qdrant",
+                "config": {
+                    "collection_name": "mem0_store",
+                    "path": str(settings.chroma_mem0_path),  # local storage
+                    "embedding_model_dims": 384,              # ✅ must match embedder dims
+                },
+            }
         }
         
         if settings.google_api_key:

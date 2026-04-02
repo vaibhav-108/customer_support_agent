@@ -50,7 +50,7 @@ def init_db()->None:
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
             
-            CREATE TRIGGER IF NOT EXISTS tickets updated at trigger
+            CREATE TRIGGER IF NOT EXISTS tickets_updated_at_trigger
             AFTER UPDATE ON tickets
             FOR EACH ROW
             BEGIN

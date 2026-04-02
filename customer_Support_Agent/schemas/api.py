@@ -61,7 +61,7 @@ class StructuredDraftContext(BaseModel):
 class DraftResponse(BaseModel):
     id: int
     ticket_id:int
-    context :str
+    content :str
     context_used : StructuredDraftContext | dict[str,Any] | None= None
     status :str
     created_at : str
@@ -70,7 +70,7 @@ class DraftUpdateRequest(BaseModel):
     content: str | None = None
     status: Literal["pending","accepted", "discarded"] | None = None
 
-class GenerateDraftRequest(BaseModel):
+class GenerateDraftResponse(BaseModel):
     ticket_id: int
     draft: DraftResponse
 
@@ -78,8 +78,8 @@ class KnowledgeIngestRequest(BaseModel):
     clear_existing: bool = False
     
 class KnowledgeIngestResponse(BaseModel):
-    file_indexed :int
-    chunk_indexed :int
+    files_indexed :int
+    chunks_indexed :int
     collection_count: int
     
 

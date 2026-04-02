@@ -5,23 +5,28 @@ from typing import Any
 
 import chromadb
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 
 from customer_Support_Agent.core import Settings
 
 class knowledgeBaseService:
     def __init__(self, settings: Settings):
         self._settings = settings
-        self._client = chromadb.PersistentClient(path=str(settings.chroma_db_dir))
+        self._client = chromadb.PersistentClient(path=str(settings.chroma_rag_dir))
         self._collection_name = "support_kb"
         self._collection = self._client.get_or_create_collection(name=self._collection_name)
         self._splitter = RecursiveCharacterTextSplitter(
             chunk_size=settings.rag_chunk_size,
             chunk_overlap=settings.rag_chunk_overlap)
+        self._embedding_function = SentenceTransformerEmbeddingFunction(
+            model_name=self._settings.effective_embedding_model
+        )
         
     def ingest_directory(self, directory: Path, clear_existing: bool = False)-> dict[str, Any]:
         if clear_existing:
             self._client.delete_collection(name=self._collection_name)
-            self._collection = self._client.get_or_create_collection(name=self._collection_name)
+            self._collection = self._client.get_or_create_collection(name=self._collection_name,
+                                                                    embedding_function=self._embedding_function,)
         
         Source_files = sorted(
             [
@@ -58,8 +63,9 @@ class knowledgeBaseService:
                 ids=ids
             )
         return {
-            "file_indexed": len(Source_files),
-            "chunk_indexed": len(docs),
+            "files_indexed": len(Source_files),
+            "chunks_indexed": len(docs),
+            "collection_count": self._collection.count(),
         }
         
     def search(self, query: str, top_k:int | None = None,) -> list[dict[str, Any]]:

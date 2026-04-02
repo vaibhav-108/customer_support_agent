@@ -1,6 +1,7 @@
 from __future__ import annotations
 from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import computed_field
 from pathlib import Path
 from dotenv import load_dotenv
 import os
@@ -8,7 +9,7 @@ import os
 load_dotenv()
 
 
-OPENROUTER_API_KEY=os.getenv("OPENROUTER_API_KEY")
+OPENROUTER_API_KEY=os.getenv("OPENROUTER_API_KEY","")
 
 class Settings(BaseSettings):
     
@@ -22,25 +23,26 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str =OPENROUTER_API_KEY
     google_api_key: str = ""
     OPENAI_API_BASE: str = "https://openrouter.ai/api/v1"
-    OPENAI_MODEL: str = "nvidia/nemotron-3-nano-30b-a3b:free"
+    OPENAI_MODEL: str = "nvidia/nemotron-3-super-120b-a12b:free"
     google_embedding_model: str = "gemini-embedding-001"
     OPENAI_TEMPERATURE: float = 0.1
-    huggingface_embedding_model: str = "sentence-transformers/all-mpnet-base-v2"
+    huggingface_embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     enable_local_embeddings: bool = True
     
-    workspace_dir: Path = Path(__file__).resolve().parent[2]
+    workspace_dir: Path = Path(__file__).resolve().parents[2]
+
     data_dir: Path = Path("data")
-    db_path: Path = Path("data/customer_support_agent.db")
-    chroma_db_dir: Path = Path("data/chroma_db")
-    chroma_memo0_dir = Path("data/chroma_memo0")
-    knowledge_base_dir: Path = Path("data/knowledge_base")
+    db_path: Path = Path("data/support.db")
+    chroma_rag_dir: Path = Path("data/chroma_rag")
+    chroma_mem0_dir: Path= Path("data/chroma_mem0")
+    knowledge_base_dir: Path = Path("knowledge_base")
     
     rag_chunk_size: int = 800
     rag_chunk_overlap: int = 120
     rag_top_k: int = 3
     mem0_top_k: int = 5
     
-    api_host: str = "0.0.0.0"
+    api_host: str = "0.0.0.0"  #"localhost"
     api_port: int = 8000
     
     dashboard_api_url: str = "http://localhost:8000"
@@ -54,17 +56,17 @@ class Settings(BaseSettings):
         return self.resolve(self.db_path)
     
     @property
-    def chroma_db_dir(self)-> Path:
-        return self.resolve(self.chroma_db_dir)
+    def chroma_rag_path(self)-> Path:
+        return self.resolve(self.chroma_rag_dir)
     
     @property
-    def chroma_memo0_dir(self)-> Path:
-        return self.resolve(self.chroma_memo0_dir)
+    def chroma_mem0_path(self)-> Path:
+        return self.resolve(self.chroma_mem0_dir)
     
     @property
-    def knowledge_base_dir(self)-> Path:
+    def knowledge_base_path(self)-> Path:
         return self.resolve(self.knowledge_base_dir)
-    
+    @computed_field
     @property
     def effective_embedding_model(self)-> str:
         """Determine which embedding model to use based on configuration."""
@@ -108,8 +110,8 @@ def ensure_directories(settings: Settings | None = None) -> None:
 
     for path in (
         config.resolve(config.data_dir),
-        config.chroma_db_dir,
-        config.chroma_memo0_dir,
-        config.knowledge_base_dir,
+        config.chroma_rag_path,
+        config.chroma_mem0_path,
+        config.knowledge_base_path,
     ):
         path.mkdir(parents=True, exist_ok=True)

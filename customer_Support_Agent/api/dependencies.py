@@ -23,20 +23,20 @@ def get_copilot_or_503() -> SupportCopilot:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=f"Copliot Service Unavailable: {e}")
     
 def get_settings_dep() -> Settings:
-    return get_settings
+    return get_settings()
 
 def get_customer_repository() -> CustomerRepository:
-    return CustomerRepository
+    return CustomerRepository()
 
 def get_ticket_repository() -> TicketRepository:
-    return TicketRepository
+    return TicketRepository()
 
 def get_draft_repository() -> DraftRepository:
-    return DraftRepository
+    return DraftRepository()
 
 def get_draft_service() -> DraftService:
-    return DraftService
+    return DraftService()
 
-def get_knowledge_service(settings: Settings= get_settings()) -> KnowledgeService:
+def get_knowledge_service(settings: Settings= Depends(get_settings_dep)) -> KnowledgeService:
     return KnowledgeService(settings=settings)
 
