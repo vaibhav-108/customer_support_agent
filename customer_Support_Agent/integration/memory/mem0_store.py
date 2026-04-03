@@ -50,7 +50,7 @@ class CustomeMemoryStore:
             }
         elif settings.enable_local_embeddings:
             config["embedder"] = {
-                "provider": "nvidia",
+                "provider": "openai",
                 "config": {
                     "model": "nvidia/llama-nemotron-embed-vl-1b-v2:free",
                 },
