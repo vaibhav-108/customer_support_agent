@@ -10,3 +10,8 @@ wheels/
 .venv
 .env
 echo "python312.tar"
+*.tar
+*.tar.gz
+data/
+*.db
+__pycache__/
