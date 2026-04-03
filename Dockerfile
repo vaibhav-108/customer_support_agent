@@ -13,9 +13,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip uv
+RUN pip install torch==2.2.2+cpu --index-url https://download.pytorch.org/whl/cpu
 
 COPY pyproject.toml uv.lock /app/
-ENV UV_EXTRA_INDEX_URL=https://download.pytorch.org/whl/cpu
 RUN uv sync --frozen --no-dev --no-cache
 
 COPY . /app

@@ -3,7 +3,7 @@ name = "project"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python ="==3.12.12"
 dependencies = [
     "chromadb>=1.5.2",
     "email-validator>=2.3.0",
@@ -20,9 +20,14 @@ dependencies = [
     "requests>=2.32.5",
     "streamlit>=1.55.0",
     "uvicorn[standard]>=0.41.0",
+    "torch==2.2.2+cpu",
 ]
 
 [dependency-groups]
 dev = [
     "pytest>=9.0.2",
 ]
+
+[tool.uv]
+extra-index-url = ["https://download.pytorch.org/whl/cpu"]
+index-strategy = "unsafe-best-match"
