@@ -26,7 +26,7 @@ class CustomeMemoryStore:
                     },
                 },
             "embedder": {
-                    "provider": "nvidia",
+                    "provider": "openai",
                     "config": {
                         "model": settings.effective_embedding_model,},
                 },
