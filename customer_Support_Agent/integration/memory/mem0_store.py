@@ -26,7 +26,7 @@ class CustomeMemoryStore:
                     },
                 },
             "embedder": {
-                    "provider": "huggingface",
+                    "provider": "nvidia",
                     "config": {
                         "model": settings.effective_embedding_model,},
                 },
@@ -50,9 +50,9 @@ class CustomeMemoryStore:
             }
         elif settings.enable_local_embeddings:
             config["embedder"] = {
-                "provider": "huggingface",
+                "provider": "nvidia",
                 "config": {
-                    "model": "all-MiniLM-L6-v2",
+                    "model": "nvidia/llama-nemotron-embed-vl-1b-v2:free",
                 },
             }
         else:

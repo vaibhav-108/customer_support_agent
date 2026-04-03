@@ -2,12 +2,30 @@ from __future__ import annotations
 import hashlib
 from pathlib import Path
 from typing import Any
+import os
 
 import chromadb
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
-
+# from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
+from openai import OpenAI
+from chromadb import Documents, Embeddings, EmbeddingFunction
 from customer_Support_Agent.core import Settings
+
+class OpenRouterEmbeddingFunction(EmbeddingFunction):
+    def __init__(self, api_key: str, base_url: str, model: str):
+        self._client = OpenAI(api_key=api_key, base_url=base_url)
+        self._model = model
+
+    def __call__(self, input: Documents) -> Embeddings:
+        embeddings = []
+        for text in input:
+            response = self._client.embeddings.create(
+                model=self._model,
+                input=[{"content": [{"type": "text", "text": text}]}],
+                encoding_format="float"
+            )
+            embeddings.append(response.data[0].embedding)
+        return embeddings
 
 class knowledgeBaseService:
     def __init__(self, settings: Settings):
@@ -18,10 +36,13 @@ class knowledgeBaseService:
         self._splitter = RecursiveCharacterTextSplitter(
             chunk_size=settings.rag_chunk_size,
             chunk_overlap=settings.rag_chunk_overlap)
-        self._embedding_function = SentenceTransformerEmbeddingFunction(
-            model_name=self._settings.effective_embedding_model
+        self._embedding_function = OpenRouterEmbeddingFunction(
+            api_key=self._settings.OPENAI_API_KEY,
+            base_url=self._settings.OPENAI_API_BASE,
+            model=self._settings.nvidia_embedding_model
         )
-        
+            
+       
     def ingest_directory(self, directory: Path, clear_existing: bool = False)-> dict[str, Any]:
         if clear_existing:
             self._client.delete_collection(name=self._collection_name)

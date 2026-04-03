@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     OPENAI_API_BASE: str = "https://openrouter.ai/api/v1"
     OPENAI_MODEL: str = "nvidia/nemotron-3-super-120b-a12b:free"
     google_embedding_model: str = "gemini-embedding-001"
+    nvidia_embedding_model: str="nvidia/llama-nemotron-embed-vl-1b-v2:free"
     OPENAI_TEMPERATURE: float = 0.1
     huggingface_embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     enable_local_embeddings: bool = True
@@ -70,7 +71,7 @@ class Settings(BaseSettings):
     @property
     def effective_embedding_model(self)-> str:
         """Determine which embedding model to use based on configuration."""
-        model= (self.huggingface_embedding_model or "").strip()
+        model= (self.nvidia_embedding_model or "").strip()
         if not model:
             raise ValueError("No embedding model configured.")
         return model
