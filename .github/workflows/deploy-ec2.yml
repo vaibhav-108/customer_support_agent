@@ -92,6 +92,24 @@ jobs:
             sleep $((attempt * 5))
           done
 
+      - name: Write .env to EC2
+        if: ${{ secrets.EC2_ENV_FILE != '' }}
+        env:
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+          EC2_USER: ${{ secrets.EC2_USER }}
+          EC2_PORT: ${{ secrets.EC2_PORT }}
+          EC2_APP_DIR: ${{ secrets.EC2_APP_DIR }}
+        run: |
+          set -euo pipefail
+          PORT="${EC2_PORT:-22}"
+          APP_DIR="${EC2_APP_DIR:-/opt/customer_support_agent}"
+          ssh -p "$PORT" \
+            -o StrictHostKeyChecking=no \
+            -o ConnectTimeout=30 \
+            "${EC2_USER}@${EC2_HOST}" \
+            "mkdir -p ${APP_DIR} && cat > ${APP_DIR}/.env" \
+            <<< "${{ secrets.EC2_ENV_FILE }}"
+
       - name: Deploy on EC2
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
