@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     google_embedding_model: str = "gemini-embedding-001"
     nvidia_embedding_model: str="nvidia/llama-nemotron-embed-vl-1b-v2:free"
     OPENAI_TEMPERATURE: float = 0.1
-    huggingface_embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
+    # huggingface_embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     enable_local_embeddings: bool = True
     
     workspace_dir: Path = Path(__file__).resolve().parents[2]
