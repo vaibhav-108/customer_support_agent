@@ -6,7 +6,6 @@ import os
 
 import chromadb
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-# from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
 from openai import OpenAI
 from chromadb import Documents, Embeddings, EmbeddingFunction
 from customer_Support_Agent.core import Settings
